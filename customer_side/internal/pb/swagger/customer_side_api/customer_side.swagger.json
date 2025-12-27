@@ -1,0 +1,185 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "customer_side_api/customer_side.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "CustomerSideService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/ggorderInfo/get-by-ids": {
+      "post": {
+        "operationId": "CustomerSideService_GetGGOrderInfoByIDs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetGGOrderInfoByIDsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetGGOrderInfoByIDsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CustomerSideService"
+        ]
+      }
+    },
+    "/ggorderInfo/insert": {
+      "post": {
+        "operationId": "CustomerSideService_InsertGGOrderInfos",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetGGOrderInfoInsertResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetGGOrderInfoInsertRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CustomerSideService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1GGOrderInfoModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "customerName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "details": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GGOrderInsertModel": {
+      "type": "object",
+      "properties": {
+        "customerName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "details": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetGGOrderInfoByIDsRequest": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          }
+        }
+      }
+    },
+    "v1GetGGOrderInfoByIDsResponse": {
+      "type": "object",
+      "properties": {
+        "GGOrderInfos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GGOrderInfoModel"
+          }
+        }
+      }
+    },
+    "v1GetGGOrderInfoInsertRequest": {
+      "type": "object",
+      "properties": {
+        "GGOrders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GGOrderInsertModel"
+          }
+        }
+      }
+    },
+    "v1GetGGOrderInfoInsertResponse": {
+      "type": "object"
+    }
+  }
+}

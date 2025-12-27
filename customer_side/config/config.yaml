@@ -1,0 +1,19 @@
+database:
+  host: "localhost"
+  port: 5432
+  username: "admin"
+  password: "admin"
+  name: "shop_customer"
+  ssl_mode: "disable"
+
+kafka:
+  host: "localhost"
+  port: 9092
+  ask_for_ggorder_info: "ask_for_ggorder_info"
+  ask_for_ggorder_info_edit: "ask_for_ggorder_info_edit"
+  provide_ggorder_info: "provide_ggorder_info"
+
+CustomerSideServiceSettings:
+  minNameLen: 1
+  maxNameLen: 50
+  

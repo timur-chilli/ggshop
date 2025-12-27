@@ -1,0 +1,189 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "warehouse_api/warehouse.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "WarehouseService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/ggorderInfo/get-by-ids": {
+      "post": {
+        "operationId": "WarehouseService_GetGGOrderInfoByIDs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetGGOrderInfoByIDsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetGGOrderInfoByIDsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "WarehouseService"
+        ]
+      }
+    },
+    "/ggorderInfo/update": {
+      "post": {
+        "operationId": "WarehouseService_UpdateGGOrderInfos",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GGOrderInfoUpdateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GGOrderInfoUpdateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "WarehouseService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1GGOrderInfoModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "customerName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "details": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GGOrderInfoUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "GGOrders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GGOrderUpdateModel"
+          }
+        }
+      }
+    },
+    "v1GGOrderInfoUpdateResponse": {
+      "type": "object"
+    },
+    "v1GGOrderUpdateModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "customerName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "details": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetGGOrderInfoByIDsRequest": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          }
+        }
+      }
+    },
+    "v1GetGGOrderInfoByIDsResponse": {
+      "type": "object",
+      "properties": {
+        "GGOrderInfos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GGOrderInfoModel"
+          }
+        }
+      }
+    }
+  }
+}
