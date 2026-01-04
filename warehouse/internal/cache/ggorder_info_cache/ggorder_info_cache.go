@@ -12,7 +12,7 @@ import (
 )
 
 type cachedGGOrderInfo struct {
-	ggorderInfo *models.GGOrderInfo `json:"ggorder_info"`
+	ggorderInfo *models.GGOrderInfo
 }
 
 type GGOrderCache struct {
@@ -40,7 +40,7 @@ func (c *GGOrderCache) Get(ctx context.Context, ggorderID string) (*models.GGOrd
 	}
 
 	var cached cachedGGOrderInfo
-	if err := json.Unmarshal(data, &cached); err != nil {
+	if err := json.Unmarshal(data, &cached.ggorderInfo); err != nil {
 		return nil, false
 	}
 

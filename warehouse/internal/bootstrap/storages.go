@@ -13,8 +13,13 @@ func InitGGOrderInfoCache(cfg *config.Config) (*ggorderInfoCache.GGOrderCache, e
 	return redisStorage.NewRedisCache(cfg)
 }
 
-func InitRemoteStorage(cache *ggorderInfoCache.GGOrderCache, 
-	editGGOrderProducer *askGGOrderInfoEditProducer.AskGGOrderInfoEditProducer,
+// func InitRemoteStorage(cache *ggorderInfoCache.GGOrderCache, 
+// 	editGGOrderProducer *askGGOrderInfoEditProducer.AskGGOrderInfoEditProducer,
+// 	ggorderProducer *askGGOrderInfoProducer.AskGGOrderInfoProducer) *remotestorage.RemoteStorage {
+// 		return remotestorage.NewRemoteStorage(cache, ggorderProducer, editGGOrderProducer)
+// }
+
+func InitRemoteStorage(editGGOrderProducer *askGGOrderInfoEditProducer.AskGGOrderInfoEditProducer,
 	ggorderProducer *askGGOrderInfoProducer.AskGGOrderInfoProducer) *remotestorage.RemoteStorage {
-		return remotestorage.NewRemoteStorage(cache, ggorderProducer, editGGOrderProducer)
+		return remotestorage.NewRemoteStorage(ggorderProducer, editGGOrderProducer)
 }

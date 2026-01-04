@@ -1,45 +1,47 @@
 
 services:
-  redis:
-    image: redis:7-alpine
-    container_name: redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 3
-    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
-    # networks:
-    # - gaming-dev-shop-net
+  # redis:
+  #   image: redis:7-alpine
+  #   hostname: redis
+  #   container_name: redis
+  #   restart: unless-stopped
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 5s
+  #     timeout: 3s
+  #     retries: 3
+  #   command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+  #   networks:
+  #   - gaming-dev-shop-net
 
-  redis-ui:
-    image: rediscommander/redis-commander:latest
-    container_name: redis-ui
-    depends_on:
-      redis:
-        condition: service_started
-    ports:
-      - "8084:8081"
-    environment:
-      - REDIS_HOSTS=local:redis:6379
-      - HTTP_USER=admin
-      - HTTP_PASSWORD=
-    # networks:
-    # - gaming-dev-shop-net
+  # redis-ui:
+  #   image: rediscommander/redis-commander:latest
+  #   container_name: redis-ui
+  #   depends_on:
+  #     redis:
+  #       condition: service_started
+  #   ports:
+  #     - "8084:8081"
+  #   environment:
+  #     - REDIS_HOSTS=local:redis:6379
+  #     - HTTP_USER=admin
+  #     - HTTP_PASSWORD=
+  #   networks:
+  #   - gaming-dev-shop-net
 
   postgres:
     image: postgres:15-alpine
+    hostname: postgres
     container_name: postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: shop_customer
+      POSTGRES_DB: customer-side
     ports:
       - "5432:5432"
     volumes:
@@ -49,32 +51,36 @@ services:
       interval: 5s
       timeout: 3s
       retries: 3
-    # networks:
-    # - gaming-dev-shop-net
+    networks:
+    - gaming-dev-shop-net
 
   kafka:
     image: apache/kafka:latest
+    hostname: kafka
     container_name: kafka
     environment:
-      - CLUSTER_ID=5L6g3nShT-eMCtK--X86sw  # Фиксированный кластер ID
-      - KAFKA_NODE_ID=1
-      - KAFKA_PROCESS_ROLES=broker,controller
-      - KAFKA_LISTENERS=PLAINTEXT_HOST://:9092,PLAINTEXT_DOCKER://:9094,CONTROLLER://:9093
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT_HOST://localhost:9092,PLAINTEXT_DOCKER://kafka:9094
-      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT_DOCKER:PLAINTEXT
-      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
-      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT_DOCKER
-      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
-      - KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0
-      - KAFKA_LOG_DIRS=/tmp/kraft-combined-logs
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qkx
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT_HOST://:9092, CONTROLLER://:9093, PLAINTEXT_DOCKER://:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://kafka:9092,PLAINTEXT_DOCKER://kafka:9094
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT_DOCKER:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_DOCKER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
     ports:
       - "9092:9092"
       - "9094:9094"
     volumes:
       - kafka_data:/kafka/kraft-combined-logs
-    # networks:
-    #   - gaming-dev-shop-net
+    networks:
+      - gaming-dev-shop-net
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -87,15 +93,69 @@ services:
       - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka:9094
       - KAFKA_CLUSTERS_0_NAME=kraft
       - KAFKA_UI_AUTH_ENABLED=false
-    # networks:
-    #   - gaming-dev-shop-net
+    networks:
+      - gaming-dev-shop-net
+
+  customer-side-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: customer-side
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # CONFIG_PATH: /config/config.yaml
+      # POSTGRES_DSN: postgres://admin:admin@postgres:5432/customer-side?sslmode=disable
+      # KAFKA_BROKERS: kafka:9094
+      customerConfigPath: "/config/config.yaml"
+      customerSwaggerPath: "/swagger/customer_side.swagger.json"
+      customerGRPCPort: ":50051"
+      customerHTTPGatewayPort: ":8080"
+    volumes:
+      - ./customer_side/config/config.yaml:/config/config.yaml:ro
+      - ./customer_side/internal/pb/swagger/customer_side_api:/swagger:ro
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    networks:
+      - gaming-dev-shop-net
+
+  warehouse-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: warehouse
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # CONFIG_PATH: /config/config.yaml
+      # POSTGRES_DSN: postgres://admin:admin@postgres:5432/warehouse?sslmode=disable
+      # KAFKA_BROKERS: kafka:9094
+      warehouseConfigPath: "/config/config.yaml"
+      warehouseSwaggerPath: "/swagger/warehouse.swagger.json"
+      warehouseGRPCPort: ":50052"
+      warehouseHTTPGatewayPort: ":8081"
+    volumes:
+      - ./warehouse/config/config.yaml:/config/config.yaml:ro
+      - ./warehouse/internal/pb/swagger/warehouse_api:/swagger:ro
+    ports:
+      - "8081:8081"
+      - "50052:50052"
+    networks:
+      - gaming-dev-shop-net
+
 
 volumes:
   redis_data:
   postgres_data:
   kafka_data:
 
-# networks:
-#   gaming-dev-shop-net:
-#     name: gaming-dev-shop-net
-#     driver: bridge
+
+networks:
+  gaming-dev-shop-net:
+    name: gaming-dev-shop-net
+    driver: bridge

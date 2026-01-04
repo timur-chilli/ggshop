@@ -9,8 +9,8 @@ import (
 	"github.com/timur-chilli/ggshop/customer_side/internal/models"
 )
 
-func (storage *PGStorage) UpdateGGOrderInfo(ctx context.Context, GGOrderInfos []*models.GGOrderInfo) error {
-	query := storage.updateQuery(GGOrderInfos)
+func (storage *PGStorage) UpdateGGOrderInfo(ctx context.Context, originalInfos []*models.GGOrderInfo) error {
+	query := storage.updateQuery(originalInfos)
 	queryText, args, err := query.ToSql()
 	if err != nil {
 		return errors.Wrap(err, "ошибка при генерации SQL-запроса")
@@ -22,8 +22,8 @@ func (storage *PGStorage) UpdateGGOrderInfo(ctx context.Context, GGOrderInfos []
 	return err
 }
 
-func (storage *PGStorage) updateQuery(GGOrderInfos []*models.GGOrderInfo) squirrel.Sqlizer {
-	infos := lo.Map(GGOrderInfos, func(info *models.GGOrderInfo, _ int) *GGOrderInfo {
+func (storage *PGStorage) updateQuery(originalInfos []*models.GGOrderInfo) squirrel.Sqlizer {
+	infos := lo.Map(originalInfos, func(info *models.GGOrderInfo, _ int) *GGOrderInfo {
 		return &GGOrderInfo{
 			ID: info.ID,
 			CustomerName: info.CustomerName,

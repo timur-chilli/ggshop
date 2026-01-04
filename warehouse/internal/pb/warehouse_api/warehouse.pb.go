@@ -23,94 +23,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type GetGGOrderInfoByIDsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ids           []uint64               `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetGGOrderInfoByIDsRequest) Reset() {
-	*x = GetGGOrderInfoByIDsRequest{}
-	mi := &file_warehouse_api_warehouse_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetGGOrderInfoByIDsRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetGGOrderInfoByIDsRequest) ProtoMessage() {}
-
-func (x *GetGGOrderInfoByIDsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_warehouse_api_warehouse_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetGGOrderInfoByIDsRequest.ProtoReflect.Descriptor instead.
-func (*GetGGOrderInfoByIDsRequest) Descriptor() ([]byte, []int) {
-	return file_warehouse_api_warehouse_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *GetGGOrderInfoByIDsRequest) GetIds() []uint64 {
-	if x != nil {
-		return x.Ids
-	}
-	return nil
-}
-
-type GetGGOrderInfoByIDsResponse struct {
-	state         protoimpl.MessageState     `protogen:"open.v1"`
-	GGOrderInfos  []*models.GGOrderInfoModel `protobuf:"bytes,1,rep,name=GGOrderInfos,proto3" json:"GGOrderInfos,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetGGOrderInfoByIDsResponse) Reset() {
-	*x = GetGGOrderInfoByIDsResponse{}
-	mi := &file_warehouse_api_warehouse_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetGGOrderInfoByIDsResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetGGOrderInfoByIDsResponse) ProtoMessage() {}
-
-func (x *GetGGOrderInfoByIDsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_warehouse_api_warehouse_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetGGOrderInfoByIDsResponse.ProtoReflect.Descriptor instead.
-func (*GetGGOrderInfoByIDsResponse) Descriptor() ([]byte, []int) {
-	return file_warehouse_api_warehouse_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *GetGGOrderInfoByIDsResponse) GetGGOrderInfos() []*models.GGOrderInfoModel {
-	if x != nil {
-		return x.GGOrderInfos
-	}
-	return nil
-}
-
 type GGOrderInfoUpdateRequest struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
 	GGOrders      []*models.GGOrderUpdateModel `protobuf:"bytes,1,rep,name=GGOrders,proto3" json:"GGOrders,omitempty"`
@@ -120,7 +32,7 @@ type GGOrderInfoUpdateRequest struct {
 
 func (x *GGOrderInfoUpdateRequest) Reset() {
 	*x = GGOrderInfoUpdateRequest{}
-	mi := &file_warehouse_api_warehouse_proto_msgTypes[2]
+	mi := &file_warehouse_api_warehouse_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -132,7 +44,7 @@ func (x *GGOrderInfoUpdateRequest) String() string {
 func (*GGOrderInfoUpdateRequest) ProtoMessage() {}
 
 func (x *GGOrderInfoUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_warehouse_api_warehouse_proto_msgTypes[2]
+	mi := &file_warehouse_api_warehouse_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -145,7 +57,7 @@ func (x *GGOrderInfoUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GGOrderInfoUpdateRequest.ProtoReflect.Descriptor instead.
 func (*GGOrderInfoUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_warehouse_api_warehouse_proto_rawDescGZIP(), []int{2}
+	return file_warehouse_api_warehouse_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *GGOrderInfoUpdateRequest) GetGGOrders() []*models.GGOrderUpdateModel {
@@ -163,7 +75,7 @@ type GGOrderInfoUpdateResponse struct {
 
 func (x *GGOrderInfoUpdateResponse) Reset() {
 	*x = GGOrderInfoUpdateResponse{}
-	mi := &file_warehouse_api_warehouse_proto_msgTypes[3]
+	mi := &file_warehouse_api_warehouse_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -175,7 +87,7 @@ func (x *GGOrderInfoUpdateResponse) String() string {
 func (*GGOrderInfoUpdateResponse) ProtoMessage() {}
 
 func (x *GGOrderInfoUpdateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_warehouse_api_warehouse_proto_msgTypes[3]
+	mi := &file_warehouse_api_warehouse_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -188,23 +100,18 @@ func (x *GGOrderInfoUpdateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GGOrderInfoUpdateResponse.ProtoReflect.Descriptor instead.
 func (*GGOrderInfoUpdateResponse) Descriptor() ([]byte, []int) {
-	return file_warehouse_api_warehouse_proto_rawDescGZIP(), []int{3}
+	return file_warehouse_api_warehouse_proto_rawDescGZIP(), []int{1}
 }
 
 var File_warehouse_api_warehouse_proto protoreflect.FileDescriptor
 
 const file_warehouse_api_warehouse_proto_rawDesc = "" +
 	"\n" +
-	"\x1dwarehouse_api/warehouse.proto\x12\x14warehouse.service.v1\x1a\x1amodels/ggorder_model.proto\x1a\x1cgoogle/api/annotations.proto\".\n" +
-	"\x1aGetGGOrderInfoByIDsRequest\x12\x10\n" +
-	"\x03ids\x18\x01 \x03(\x04R\x03ids\"f\n" +
-	"\x1bGetGGOrderInfoByIDsResponse\x12G\n" +
-	"\fGGOrderInfos\x18\x01 \x03(\v2#.ggorder.models.v1.GGOrderInfoModelR\fGGOrderInfos\"]\n" +
+	"\x1dwarehouse_api/warehouse.proto\x12\x14warehouse.service.v1\x1a\x1amodels/ggorder_model.proto\x1a\x1cgoogle/api/annotations.proto\"]\n" +
 	"\x18GGOrderInfoUpdateRequest\x12A\n" +
 	"\bGGOrders\x18\x01 \x03(\v2%.ggorder.models.v1.GGOrderUpdateModelR\bGGOrders\"\x1b\n" +
-	"\x19GGOrderInfoUpdateResponse2\xcb\x02\n" +
-	"\x10WarehouseService\x12\x9e\x01\n" +
-	"\x13GetGGOrderInfoByIDs\x120.warehouse.service.v1.GetGGOrderInfoByIDsRequest\x1a1.warehouse.service.v1.GetGGOrderInfoByIDsResponse\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/ggorderInfo/get-by-ids\x12\x95\x01\n" +
+	"\x19GGOrderInfoUpdateResponse2\xaa\x01\n" +
+	"\x10WarehouseService\x12\x95\x01\n" +
 	"\x12UpdateGGOrderInfos\x12..warehouse.service.v1.GGOrderInfoUpdateRequest\x1a/.warehouse.service.v1.GGOrderInfoUpdateResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/ggorderInfo/updateBDZBgithub.com/timur-chilli/ggshop/warehouse/internal/pb/warehouse_apib\x06proto3"
 
 var (
@@ -219,27 +126,21 @@ func file_warehouse_api_warehouse_proto_rawDescGZIP() []byte {
 	return file_warehouse_api_warehouse_proto_rawDescData
 }
 
-var file_warehouse_api_warehouse_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_warehouse_api_warehouse_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_warehouse_api_warehouse_proto_goTypes = []any{
-	(*GetGGOrderInfoByIDsRequest)(nil),  // 0: warehouse.service.v1.GetGGOrderInfoByIDsRequest
-	(*GetGGOrderInfoByIDsResponse)(nil), // 1: warehouse.service.v1.GetGGOrderInfoByIDsResponse
-	(*GGOrderInfoUpdateRequest)(nil),    // 2: warehouse.service.v1.GGOrderInfoUpdateRequest
-	(*GGOrderInfoUpdateResponse)(nil),   // 3: warehouse.service.v1.GGOrderInfoUpdateResponse
-	(*models.GGOrderInfoModel)(nil),     // 4: ggorder.models.v1.GGOrderInfoModel
-	(*models.GGOrderUpdateModel)(nil),   // 5: ggorder.models.v1.GGOrderUpdateModel
+	(*GGOrderInfoUpdateRequest)(nil),  // 0: warehouse.service.v1.GGOrderInfoUpdateRequest
+	(*GGOrderInfoUpdateResponse)(nil), // 1: warehouse.service.v1.GGOrderInfoUpdateResponse
+	(*models.GGOrderUpdateModel)(nil), // 2: ggorder.models.v1.GGOrderUpdateModel
 }
 var file_warehouse_api_warehouse_proto_depIdxs = []int32{
-	4, // 0: warehouse.service.v1.GetGGOrderInfoByIDsResponse.GGOrderInfos:type_name -> ggorder.models.v1.GGOrderInfoModel
-	5, // 1: warehouse.service.v1.GGOrderInfoUpdateRequest.GGOrders:type_name -> ggorder.models.v1.GGOrderUpdateModel
-	0, // 2: warehouse.service.v1.WarehouseService.GetGGOrderInfoByIDs:input_type -> warehouse.service.v1.GetGGOrderInfoByIDsRequest
-	2, // 3: warehouse.service.v1.WarehouseService.UpdateGGOrderInfos:input_type -> warehouse.service.v1.GGOrderInfoUpdateRequest
-	1, // 4: warehouse.service.v1.WarehouseService.GetGGOrderInfoByIDs:output_type -> warehouse.service.v1.GetGGOrderInfoByIDsResponse
-	3, // 5: warehouse.service.v1.WarehouseService.UpdateGGOrderInfos:output_type -> warehouse.service.v1.GGOrderInfoUpdateResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	2, // 0: warehouse.service.v1.GGOrderInfoUpdateRequest.GGOrders:type_name -> ggorder.models.v1.GGOrderUpdateModel
+	0, // 1: warehouse.service.v1.WarehouseService.UpdateGGOrderInfos:input_type -> warehouse.service.v1.GGOrderInfoUpdateRequest
+	1, // 2: warehouse.service.v1.WarehouseService.UpdateGGOrderInfos:output_type -> warehouse.service.v1.GGOrderInfoUpdateResponse
+	2, // [2:3] is the sub-list for method output_type
+	1, // [1:2] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_warehouse_api_warehouse_proto_init() }
@@ -253,7 +154,7 @@ func file_warehouse_api_warehouse_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_warehouse_api_warehouse_proto_rawDesc), len(file_warehouse_api_warehouse_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

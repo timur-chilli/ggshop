@@ -1,4 +1,4 @@
-package ggorder_info_consumer
+package customer_create_order_consumer
 
 import (
 	"context"
@@ -7,9 +7,10 @@ import (
 	"time"
 
 	"github.com/segmentio/kafka-go"
+	"github.com/timur-chilli/ggshop/customer_side/internal/models"
 )
 
-func (c *AskGGOrderInfoConsumer) Consume(ctx context.Context) {
+func (c *CustomerCreateOrderConsumer) Consume(ctx context.Context) {
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:           c.kafkaBroker,
 		GroupID:           "CustomerSideService_group",
@@ -22,21 +23,19 @@ func (c *AskGGOrderInfoConsumer) Consume(ctx context.Context) {
 	for {
 		msg, err := r.ReadMessage(ctx)
 		if err != nil {
-			slog.Error("GGOrderInfoEditConsumer.consume error", "error", err.Error())
+			slog.Error("CustomerCreateOrderConsumer.Consume error", "error", err.Error())
 		}
-		var tempId uint64
-		err = json.Unmarshal(msg.Value, &tempId)
+		var infos []*models.GGOrderInfo
+		err = json.Unmarshal(msg.Value, &infos)
 		if err != nil {
 			slog.Error("parse", "error", err)
 			continue
 		}
-
-		var ids []uint64
-		ids = append(ids, tempId)
-		err = c.GGOrderInfoProcessor.HandleRemoteGetByID(ctx, ids)
+		err = c.GGOrderInfoProcessor.HandleCreateOrder(ctx, infos)
 		if err != nil {
 			slog.Error("handle", "error", err)
 		}
+
 	}
 
 }

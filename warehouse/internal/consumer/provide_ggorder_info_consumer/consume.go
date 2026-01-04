@@ -3,8 +3,10 @@ package provide_ggorder_info_consumer
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"log/slog"
 	"time"
+
 	"github.com/segmentio/kafka-go"
 	"github.com/timur-chilli/ggshop/warehouse/internal/models"
 )
@@ -22,17 +24,20 @@ func (c *ProvideGGOrderInfoConsumer) Consume(ctx context.Context) {
 	for {
 		msg, err := r.ReadMessage(ctx)
 		if err != nil {
-			slog.Error("GGOrderInfoConsumer.consume error", "error", err.Error())
+			slog.Error("GGOrderInfoConsumer.Consume error", "error", err.Error())
 		}
-		var ggorderInfos []*models.GGOrderInfo
-		err = json.Unmarshal(msg.Value, &ggorderInfos)
+		var info *models.GGOrderInfo
+		err = json.Unmarshal(msg.Value, &info)
 		if err != nil {
-			slog.Error("parse", "error", err)
+			slog.Error("ProvideGGOrderInfoConsumer.Consume parse", "error", err)
 			continue
 		}
-		err = c.GGOrderInfoProcessor.GetRemoteIDsHandle(ctx, ggorderInfos)
+		log.Printf("ProvideGGOrderInfoConsumer.Consume success: consumed message %+v", info)
+		var infos []*models.GGOrderInfo
+		infos = append(infos, info)
+		err = c.GGOrderInfoProcessor.GetRemoteIDsHandle(ctx, infos)
 		if err != nil {
-			slog.Error("handle", "error", err)
+			slog.Error("ProvideGGOrderInfoConsumer.Consume handle", "error", err)
 		}
 
 	}

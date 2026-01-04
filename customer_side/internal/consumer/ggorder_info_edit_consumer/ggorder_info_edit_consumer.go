@@ -7,7 +7,7 @@ import (
 )
 
 type GGOrderInfoProcessor interface {
-	Handle(ctx context.Context, GGOrdersInfo *models.GGOrderInfo) error
+	HandleRemoteEdit(ctx context.Context, GGOrdersInfo *models.GGOrderInfo) error
 }
 
 type AskGGOrderInfoEditConsumer struct {

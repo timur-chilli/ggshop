@@ -6,12 +6,12 @@ import "models/ggorder_model.proto";
 import "google/api/annotations.proto";
 
 service WarehouseService {
-   rpc GetGGOrderInfoByIDs (GetGGOrderInfoByIDsRequest) returns (GetGGOrderInfoByIDsResponse) {
-        option (google.api.http) = {
-            post: "/ggorderInfo/get-by-ids"
-            body: "*"
-        };
-    }
+//    rpc GetGGOrderInfoByIDs (GetGGOrderInfoByIDsRequest) returns (GetGGOrderInfoByIDsResponse) {
+//         option (google.api.http) = {
+//             post: "/ggorderInfo/get-by-ids"
+//             body: "*"
+//         };
+//     }
 
     rpc UpdateGGOrderInfos (GGOrderInfoUpdateRequest) returns (GGOrderInfoUpdateResponse) {
         option (google.api.http) = {
@@ -21,13 +21,13 @@ service WarehouseService {
     }
  }
 
-message GetGGOrderInfoByIDsRequest {
-    repeated uint64 ids = 1;
-}
+// message GetGGOrderInfoByIDsRequest {
+//     repeated uint64 ids = 1;
+// }
 
-message GetGGOrderInfoByIDsResponse {
-    repeated ggorder.models.v1.GGOrderInfoModel GGOrderInfos = 1;
-}
+// message GetGGOrderInfoByIDsResponse {
+//     repeated ggorder.models.v1.GGOrderInfoModel GGOrderInfos = 1;
+// }
 
 message GGOrderInfoUpdateRequest {
     repeated ggorder.models.v1.GGOrderUpdateModel GGOrders = 1;

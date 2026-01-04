@@ -1,17 +1,19 @@
 database:
-  host: "localhost"
+  host: "postgres"
   port: 5432
   username: "admin"
   password: "admin"
-  name: "shop_customer"
+  name: "customer-side"
   ssl_mode: "disable"
 
 kafka:
-  host: "localhost"
+  host: "kafka"
   port: 9092
   ask_for_ggorder_info: "ask_for_ggorder_info"
   ask_for_ggorder_info_edit: "ask_for_ggorder_info_edit"
   provide_ggorder_info: "provide_ggorder_info"
+  customer_create_order: "customer_create_order"
+  customer_get_order: "customer_get_order"
 
 CustomerSideServiceSettings:
   minNameLen: 1

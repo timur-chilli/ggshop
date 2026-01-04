@@ -2,6 +2,7 @@ package customer_side_service_api
 
 import (
 	"context"
+	"log"
 
 	"github.com/samber/lo"
 	"github.com/timur-chilli/ggshop/customer_side/internal/models"
@@ -10,6 +11,7 @@ import (
 )
 
 func (s *CustomerSideServiceAPI) InsertGGOrderInfos(ctx context.Context, req *customerSideApi.GetGGOrderInfoInsertRequest) (*customerSideApi.GetGGOrderInfoInsertResponse, error) {
+	log.Printf("API: Called InsertGGOrderInfos, new Orders: %v", req.GGOrders)
 	err := s.customerSideService.InsertGGOrderInfo(ctx, mapGGOrderInfo(req.GGOrders))
 	if err != nil {
 		return &customerSideApi.GetGGOrderInfoInsertResponse{}, err

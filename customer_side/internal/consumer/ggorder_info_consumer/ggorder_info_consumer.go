@@ -5,7 +5,7 @@ import (
 )
 
 type GGOrderInfoProcessor interface {
-	RemoteHandleIDs(ctx context.Context, ggorderInfoID []uint64) error
+	HandleRemoteGetByID(ctx context.Context, ggorderInfoID []uint64) error
 }
 
 type AskGGOrderInfoConsumer struct {

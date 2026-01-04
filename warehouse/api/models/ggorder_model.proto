@@ -3,12 +3,12 @@ syntax = "proto3";
 package ggorder.models.v1;
 option go_package = "github.com/timur-chilli/ggshop/warehouse/internal/pb/models";
 
-message GGOrderInfoModel {
-    uint64 id     = 1; 
-    string customerName   = 2;
-    string email  = 3;
-    string details = 4;
-}
+// message GGOrderInfoModel {
+//     uint64 id     = 1; 
+//     string customerName   = 2;
+//     string email  = 3;
+//     string details = 4;
+// }
 
 message GGOrderUpdateModel {
     uint64 id     = 1; 

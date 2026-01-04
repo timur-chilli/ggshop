@@ -31,7 +31,7 @@ func (c *AskGGOrderInfoEditConsumer) Consume(ctx context.Context) {
 			slog.Error("parce", "error", err)
 			continue
 		}
-		err = c.GGOrderInfoProcessor.Handle(ctx, GGOrderInfo)
+		err = c.GGOrderInfoProcessor.HandleRemoteEdit(ctx, GGOrderInfo)
 		if err != nil {
 			slog.Error("Handle", "error", err)
 		}

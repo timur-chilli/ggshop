@@ -28,6 +28,8 @@ type KafkaConfig struct {
 	AskForGGOrderInfoTopicName     string `yaml:"ask_for_ggorder_info"`
 	AskForGGOrderInfoEditTopicName string `yaml:"ask_for_ggorder_info_edit"`
 	ProvideGGOrderInfoTopicName    string `yaml:"provide_ggorder_info"`
+	CustomerCreateOrderTopicName   string `yaml:"customer_create_order"`
+	CustomerGetOrderTopicName      string `yaml:"customer_get_order"`
 }
 
 type CustomerSideServiceSettings struct {

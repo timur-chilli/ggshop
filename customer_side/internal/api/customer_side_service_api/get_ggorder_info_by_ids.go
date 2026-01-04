@@ -11,7 +11,7 @@ import (
 )
 
 func (s *CustomerSideServiceAPI) GetGGOrderInfoByIDs(ctx context.Context, req *customerSideAPI.GetGGOrderInfoByIDsRequest) (*customerSideAPI.GetGGOrderInfoByIDsResponse, error) {
-	log.Printf("Received request with IDs: %v", req.Ids)
+	log.Printf("API: Received request with IDs: %v", req.Ids)
 
 	response, err := s.customerSideService.GetGGOrderInfoByIDs(ctx, req.Ids)
 	if err != nil {
@@ -30,5 +30,3 @@ func mapGGOrderInfoByResponse(ggorderInfos []*models.GGOrderInfo) []*pbModels.GG
 		}
 	})
 }
-
-

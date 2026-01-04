@@ -14,25 +14,28 @@ import (
 
 type CustomerSideServiceSuite struct {
 	suite.Suite
-	ctx            context.Context
-	mockStorage *mocks.MockGGOrderStorage
-	customerSideService *CustomerSideService 
+	ctx                     context.Context
+	mockGetOrderProducer    *mocks.MockCustomerGetOrderProducer
+	mockCreateOrderProducer *mocks.MockCustomerCreateOrderProducer
+	mockStorage             *mocks.MockGGOrderStorage
+	customerSideService     *CustomerSideService
 }
 
 func (s *CustomerSideServiceSuite) SetupTest() {
 	s.mockStorage = mocks.NewMockGGOrderStorage(s.T())
+	s.mockGetOrderProducer = mocks.NewMockCustomerGetOrderProducer(s.T())
+	s.mockCreateOrderProducer = mocks.NewMockCustomerCreateOrderProducer(s.T())
 	s.ctx = context.Background()
-	s.customerSideService = NewCustomerSideService(s.ctx, s.mockStorage, 0, 100)
+	s.customerSideService = NewCustomerSideService(s.ctx, s.mockStorage, s.mockGetOrderProducer, s.mockCreateOrderProducer, 0, 100)
 }
-
 
 func (s *CustomerSideServiceSuite) TestInsertSuccess() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 1,
+			ID:           1,
 			CustomerName: "Timur",
-			Email: "timur@timur.ru",
-			Details: "Lorem ipsum",
+			Email:        "timur@timur.ru",
+			Details:      "Lorem ipsum",
 		},
 	}
 	s.mockStorage.EXPECT().InsertGGOrderInfo(s.ctx, ggorders).Return(nil)
@@ -40,20 +43,19 @@ func (s *CustomerSideServiceSuite) TestInsertSuccess() {
 	assert.NilError(s.T(), err)
 }
 
-
 func (s *CustomerSideServiceSuite) TestInsertSuccess2() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 3,
+			ID:           3,
 			CustomerName: "Tim",
-			Email: "google@gmail.ru",
-			Details: "..............",
+			Email:        "google@gmail.ru",
+			Details:      "..............",
 		},
 		{
-			ID: 2,
+			ID:           2,
 			CustomerName: "Pupupu",
-			Email: "zuzuzu@zu.zu",
-			Details: ",,,,,,,,,,,,,",
+			Email:        "zuzuzu@zu.zu",
+			Details:      ",,,,,,,,,,,,,",
 		},
 	}
 	s.mockStorage.EXPECT().InsertGGOrderInfo(s.ctx, ggorders).Return(nil)
@@ -64,10 +66,10 @@ func (s *CustomerSideServiceSuite) TestInsertSuccess2() {
 func (s *CustomerSideServiceSuite) TestInsertStorageError() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 1,
+			ID:           1,
 			CustomerName: "Timur",
-			Email: "timur@timur.ru",
-			Details: "Lorem ipsum",
+			Email:        "timur@timur.ru",
+			Details:      "Lorem ipsum",
 		},
 	}
 	wantErr := errors.New("error")
@@ -79,10 +81,10 @@ func (s *CustomerSideServiceSuite) TestInsertStorageError() {
 func (s *CustomerSideServiceSuite) TestInsertEmptyNameError() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 23231,
+			ID:           23231,
 			CustomerName: "",
-			Email: "timur@timur.ru",
-			Details: "Lorem ipsum",
+			Email:        "timur@timur.ru",
+			Details:      "Lorem ipsum",
 		},
 	}
 
@@ -95,10 +97,10 @@ func (s *CustomerSideServiceSuite) TestInsertEmptyNameError() {
 func (s *CustomerSideServiceSuite) TestInsertCustomerNameTooLarge() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 1121211,
+			ID:           1121211,
 			CustomerName: strings.Repeat("x", 101),
-			Email: "timur@timur.ru",
-			Details: "Lorem ipsum",
+			Email:        "timur@timur.ru",
+			Details:      "Lorem ipsum",
 		},
 	}
 
@@ -111,10 +113,10 @@ func (s *CustomerSideServiceSuite) TestInsertCustomerNameTooLarge() {
 func (s *CustomerSideServiceSuite) TestInsertDetailsTooLarge() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 99,
+			ID:           99,
 			CustomerName: "iamlargedetailscustomer",
-			Email: "just@email.com",
-			Details: strings.Repeat("x", 401),
+			Email:        "just@email.com",
+			Details:      strings.Repeat("x", 401),
 		},
 	}
 
@@ -127,10 +129,10 @@ func (s *CustomerSideServiceSuite) TestInsertDetailsTooLarge() {
 func (s *CustomerSideServiceSuite) TestInsertDetailsEmpty() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 55,
+			ID:           55,
 			CustomerName: "iamemptydetailscustomer",
-			Email: "just@email.com",
-			Details: "",
+			Email:        "just@email.com",
+			Details:      "",
 		},
 	}
 
@@ -143,10 +145,10 @@ func (s *CustomerSideServiceSuite) TestInsertDetailsEmpty() {
 func (s *CustomerSideServiceSuite) TestWrongEmail1() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 55,
+			ID:           55,
 			CustomerName: "iamemptydetailscustomer",
-			Email: "@@@@@",
-			Details: "b",
+			Email:        "@@@@@",
+			Details:      "b",
 		},
 	}
 
@@ -159,10 +161,10 @@ func (s *CustomerSideServiceSuite) TestWrongEmail1() {
 func (s *CustomerSideServiceSuite) TestEmptyEmail() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 56,
+			ID:           56,
 			CustomerName: "iamemptyemailscustomer",
-			Email: "",
-			Details: "a",
+			Email:        "",
+			Details:      "a",
 		},
 	}
 
@@ -171,15 +173,14 @@ func (s *CustomerSideServiceSuite) TestEmptyEmail() {
 	assert.Check(s.T(), err != nil)
 
 }
-
 
 func (s *CustomerSideServiceSuite) TestTooBigEmail() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 57,
+			ID:           57,
 			CustomerName: "iamtoobigemailscustomer",
-			Email: strings.Repeat("x", 254) + "@mail.ru",
-			Details: "a",
+			Email:        strings.Repeat("x", 254) + "@mail.ru",
+			Details:      "a",
 		},
 	}
 
@@ -189,14 +190,13 @@ func (s *CustomerSideServiceSuite) TestTooBigEmail() {
 
 }
 
-
 func (s *CustomerSideServiceSuite) TestTooSmallEmail() {
 	ggorders := []*models.GGOrderInfo{
 		{
-			ID: 58,
+			ID:           58,
 			CustomerName: "iamtoosmallemailscustomer",
-			Email: "@m",
-			Details: "a",
+			Email:        "@m",
+			Details:      "a",
 		},
 	}
 

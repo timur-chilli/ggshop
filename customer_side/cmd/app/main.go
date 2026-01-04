@@ -17,14 +17,20 @@ func main() {
 
 	//Здесь хранятся все данные о заказах GGOrderInfo (название не самое удачное)
 	storage := bootstrap.InitPGStorage(cfg)
-	customerSideService := bootstrap.InitCustomerSideService(storage, cfg)
+
+	customerCreateOrderProducer := bootstrap.InitCustomerCreateOrderProducer(cfg)
+	customerGetOrderProducer := bootstrap.InitCustomerGetOrderProducer(cfg)
+
+	customerSideService := bootstrap.InitCustomerSideService(storage, customerGetOrderProducer, customerCreateOrderProducer, cfg)
 
 	provideGGOrderInfoProducer := bootstrap.InitProvideGGOrderInfoProducer(cfg)
 
 	ggorderInfoMessagesProcessor := bootstrap.InitGGOrderInfoMessagesProcessor(customerSideService, provideGGOrderInfoProducer)
 	askForGGOrderInfoConsumer := bootstrap.InitAskForGGOrderInfoConsumer(cfg, ggorderInfoMessagesProcessor)
 	askForGGOrderInfoEditConsumer := bootstrap.InitAskForGGOrderInfoEditConsumer(cfg, ggorderInfoMessagesProcessor)
+	customerCreateOrderConsumer := bootstrap.InitCustomerCreateOrderConsumer(cfg, ggorderInfoMessagesProcessor)
+	customerGetOrderConsumer := bootstrap.InitCustomerGetOrderConsumer(cfg, ggorderInfoMessagesProcessor)
 	customerSideAPI := bootstrap.InitCustomerSideServiceAPI(customerSideService)
 
-	bootstrap.AppRun(*customerSideAPI, askForGGOrderInfoEditConsumer, askForGGOrderInfoConsumer)
+	bootstrap.AppRun(*customerSideAPI, askForGGOrderInfoEditConsumer, askForGGOrderInfoConsumer, customerCreateOrderConsumer, customerGetOrderConsumer)
 }

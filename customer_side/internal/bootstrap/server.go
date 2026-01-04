@@ -9,6 +9,8 @@ import (
 	"os"
 
 	server "github.com/timur-chilli/ggshop/customer_side/internal/api/customer_side_service_api"
+	customerCreateOrderConsumer "github.com/timur-chilli/ggshop/customer_side/internal/consumer/customer_create_order_consumer"
+	customerGetOrderConsumer "github.com/timur-chilli/ggshop/customer_side/internal/consumer/customer_get_order_consumer"
 	ggorderInfoConsumer "github.com/timur-chilli/ggshop/customer_side/internal/consumer/ggorder_info_consumer"
 	ggorderInfoEditConsumer "github.com/timur-chilli/ggshop/customer_side/internal/consumer/ggorder_info_edit_consumer"
 
@@ -21,9 +23,13 @@ import (
 )
 
 func AppRun(api server.CustomerSideServiceAPI, ggorderInfoEditConsumer *ggorderInfoEditConsumer.AskGGOrderInfoEditConsumer,
-	ggorderInfoConsumer *ggorderInfoConsumer.AskGGOrderInfoConsumer) {
+	ggorderInfoConsumer *ggorderInfoConsumer.AskGGOrderInfoConsumer, createOrderConsumer *customerCreateOrderConsumer.CustomerCreateOrderConsumer, 
+	getOrderConsumer *customerGetOrderConsumer.CustomerGetOrderConsumer) {
 	go ggorderInfoEditConsumer.Consume(context.Background())
 	go ggorderInfoConsumer.Consume(context.Background())
+	go createOrderConsumer.Consume(context.Background())
+	go getOrderConsumer.Consume(context.Background())
+
 	go func() {
 		if err := runGRPCServer(api); err != nil {
 			panic(fmt.Errorf("failed to run gRPC server: %v", err))
@@ -66,7 +72,7 @@ func runGatewayServer() error {
 	r.Get("/docs/*", httpSwagger.Handler(
 		httpSwagger.URL("/swagger.json"),
 	))
-	
+
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 

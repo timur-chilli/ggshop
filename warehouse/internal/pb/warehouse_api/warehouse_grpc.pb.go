@@ -19,15 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	WarehouseService_GetGGOrderInfoByIDs_FullMethodName = "/warehouse.service.v1.WarehouseService/GetGGOrderInfoByIDs"
-	WarehouseService_UpdateGGOrderInfos_FullMethodName  = "/warehouse.service.v1.WarehouseService/UpdateGGOrderInfos"
+	WarehouseService_UpdateGGOrderInfos_FullMethodName = "/warehouse.service.v1.WarehouseService/UpdateGGOrderInfos"
 )
 
 // WarehouseServiceClient is the client API for WarehouseService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type WarehouseServiceClient interface {
-	GetGGOrderInfoByIDs(ctx context.Context, in *GetGGOrderInfoByIDsRequest, opts ...grpc.CallOption) (*GetGGOrderInfoByIDsResponse, error)
 	UpdateGGOrderInfos(ctx context.Context, in *GGOrderInfoUpdateRequest, opts ...grpc.CallOption) (*GGOrderInfoUpdateResponse, error)
 }
 
@@ -37,16 +35,6 @@ type warehouseServiceClient struct {
 
 func NewWarehouseServiceClient(cc grpc.ClientConnInterface) WarehouseServiceClient {
 	return &warehouseServiceClient{cc}
-}
-
-func (c *warehouseServiceClient) GetGGOrderInfoByIDs(ctx context.Context, in *GetGGOrderInfoByIDsRequest, opts ...grpc.CallOption) (*GetGGOrderInfoByIDsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetGGOrderInfoByIDsResponse)
-	err := c.cc.Invoke(ctx, WarehouseService_GetGGOrderInfoByIDs_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *warehouseServiceClient) UpdateGGOrderInfos(ctx context.Context, in *GGOrderInfoUpdateRequest, opts ...grpc.CallOption) (*GGOrderInfoUpdateResponse, error) {
@@ -63,7 +51,6 @@ func (c *warehouseServiceClient) UpdateGGOrderInfos(ctx context.Context, in *GGO
 // All implementations must embed UnimplementedWarehouseServiceServer
 // for forward compatibility.
 type WarehouseServiceServer interface {
-	GetGGOrderInfoByIDs(context.Context, *GetGGOrderInfoByIDsRequest) (*GetGGOrderInfoByIDsResponse, error)
 	UpdateGGOrderInfos(context.Context, *GGOrderInfoUpdateRequest) (*GGOrderInfoUpdateResponse, error)
 	mustEmbedUnimplementedWarehouseServiceServer()
 }
@@ -75,9 +62,6 @@ type WarehouseServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedWarehouseServiceServer struct{}
 
-func (UnimplementedWarehouseServiceServer) GetGGOrderInfoByIDs(context.Context, *GetGGOrderInfoByIDsRequest) (*GetGGOrderInfoByIDsResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetGGOrderInfoByIDs not implemented")
-}
 func (UnimplementedWarehouseServiceServer) UpdateGGOrderInfos(context.Context, *GGOrderInfoUpdateRequest) (*GGOrderInfoUpdateResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateGGOrderInfos not implemented")
 }
@@ -100,24 +84,6 @@ func RegisterWarehouseServiceServer(s grpc.ServiceRegistrar, srv WarehouseServic
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&WarehouseService_ServiceDesc, srv)
-}
-
-func _WarehouseService_GetGGOrderInfoByIDs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetGGOrderInfoByIDsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(WarehouseServiceServer).GetGGOrderInfoByIDs(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: WarehouseService_GetGGOrderInfoByIDs_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WarehouseServiceServer).GetGGOrderInfoByIDs(ctx, req.(*GetGGOrderInfoByIDsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _WarehouseService_UpdateGGOrderInfos_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -145,10 +111,6 @@ var WarehouseService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "warehouse.service.v1.WarehouseService",
 	HandlerType: (*WarehouseServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "GetGGOrderInfoByIDs",
-			Handler:    _WarehouseService_GetGGOrderInfoByIDs_Handler,
-		},
 		{
 			MethodName: "UpdateGGOrderInfos",
 			Handler:    _WarehouseService_UpdateGGOrderInfos_Handler,

@@ -16,38 +16,6 @@
     "application/json"
   ],
   "paths": {
-    "/ggorderInfo/get-by-ids": {
-      "post": {
-        "operationId": "WarehouseService_GetGGOrderInfoByIDs",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetGGOrderInfoByIDsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetGGOrderInfoByIDsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "WarehouseService"
-        ]
-      }
-    },
     "/ggorderInfo/update": {
       "post": {
         "operationId": "WarehouseService_UpdateGGOrderInfos",
@@ -110,24 +78,6 @@
         }
       }
     },
-    "v1GGOrderInfoModel": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uint64"
-        },
-        "customerName": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "details": {
-          "type": "string"
-        }
-      }
-    },
     "v1GGOrderInfoUpdateRequest": {
       "type": "object",
       "properties": {
@@ -158,30 +108,6 @@
         },
         "details": {
           "type": "string"
-        }
-      }
-    },
-    "v1GetGGOrderInfoByIDsRequest": {
-      "type": "object",
-      "properties": {
-        "ids": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "uint64"
-          }
-        }
-      }
-    },
-    "v1GetGGOrderInfoByIDsResponse": {
-      "type": "object",
-      "properties": {
-        "GGOrderInfos": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1GGOrderInfoModel"
-          }
         }
       }
     }
